@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.MediaType;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -72,7 +73,10 @@ public class HolidayController {
             summary = "Upload holiday CSV file",
             description = "Uploads multiple federal holidays from a CSV file"
     )
-    @PostMapping("/upload")
+    @PostMapping(
+            value = "/upload",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
     public ResponseEntity<String> uploadHolidayFile(@RequestParam("file") MultipartFile file) {
         int count = holidayService.uploadHolidays(file);
         return ResponseEntity.ok(count + " holidays uploaded successfully.");
