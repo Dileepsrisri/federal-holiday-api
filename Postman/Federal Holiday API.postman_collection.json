@@ -106,9 +106,7 @@
           "formdata": [
             {
               "key": "file",
-              "type": "file",
-              "uuid": "c6f37dc2-a307-40ad-8d92-6b9739daaf06",
-              "src": "/C:/Users/Dileep/Music/holiday.csv"
+              "type": "file"
             }
           ]
         },
