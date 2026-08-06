@@ -68,6 +68,10 @@ public class HolidayServiceImpl implements HolidayService {
                 .orElseThrow(()
                         -> new HolidayNotFoundException("Holiday not found with id: " + id)
                 );
+        boolean duplicateExists =holidayRepository.existsByCountryAndNameAndDateAndIdNot(request.getCountry(),request.getName(),request.getDate(), id);
+        if (duplicateExists) {
+            throw new DuplicateHolidayException("Holiday already exists for the given country, name and date");
+        }
         holiday.setCountry(request.getCountry());
         holiday.setName(request.getName());
         holiday.setDate(request.getDate());
@@ -87,6 +91,22 @@ public class HolidayServiceImpl implements HolidayService {
             reader.readLine();
             while ((line = reader.readLine()) != null) {
                 String[] data = line.split(",");
+                Country country = Country.valueOf(data[0].trim().toUpperCase());
+                String name = data[1].trim();
+                LocalDate date = LocalDate.parse(data[2].trim());
+                if (holidayRepository.existsByCountryAndNameAndDate(country,name,date)) {
+                    throw new DuplicateHolidayException("Holiday already exists: " + name);
+                }
+                // Check duplicate inside uploaded CSV
+                boolean duplicateInFile = holidays.stream()
+                        .anyMatch(h ->
+                                h.getCountry().equals(country)
+                                && h.getName().equalsIgnoreCase(name)
+                                && h.getDate().equals(date) );
+
+                if (duplicateInFile) {
+                	 throw new DuplicateHolidayException("Holiday already exists: " + name);
+                }
                 Holiday holiday = Holiday.builder()
                         .country(Country.valueOf(data[0].trim().toUpperCase()))
                         .name(data[1].trim())

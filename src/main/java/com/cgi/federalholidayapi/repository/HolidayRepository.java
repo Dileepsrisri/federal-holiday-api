@@ -22,4 +22,6 @@ public interface HolidayRepository extends JpaRepository<Holiday, Long> {
     List<Holiday> findByCountry(Country country);
     
     boolean existsByCountryAndNameAndDate(Country country, String name, LocalDate date);
+    
+    boolean existsByCountryAndNameAndDateAndIdNot(Country country, String name,LocalDate date, Long id );
 }
