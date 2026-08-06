@@ -25,4 +25,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleFileUploadException(FileUploadException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
+    
+    @ExceptionHandler(DuplicateHolidayException.class)
+    public ResponseEntity<String> handleDuplicateHoliday(DuplicateHolidayException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+    }
 }

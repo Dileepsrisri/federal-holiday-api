@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.cgi.federalholidayapi.enums.Country;
 import com.cgi.federalholidayapi.exception.FileUploadException;
+import com.cgi.federalholidayapi.exception.DuplicateHolidayException;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +38,9 @@ public class HolidayServiceImpl implements HolidayService {
 
     @Override
     public HolidayResponse addHoliday(HolidayRequest request) {
+        if (holidayRepository.existsByCountryAndNameAndDate(request.getCountry(),request.getName(),request.getDate())) {
+            throw new DuplicateHolidayException("Holiday already exists for the given country, name and date" );
+        }
         Holiday holiday = Holiday.builder()
                 .country(request.getCountry())
                 .name(request.getName())
@@ -90,6 +94,7 @@ public class HolidayServiceImpl implements HolidayService {
                         .build();
                 holidays.add(holiday);
             }
+            
             holidayRepository.saveAll(holidays);
             return holidays.size();
         } catch (IOException e) {

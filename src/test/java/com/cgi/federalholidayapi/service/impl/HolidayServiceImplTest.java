@@ -9,7 +9,7 @@ import com.cgi.federalholidayapi.dto.HolidayResponse;
 import com.cgi.federalholidayapi.entity.Holiday;
 import com.cgi.federalholidayapi.enums.Country;
 import com.cgi.federalholidayapi.exception.FileUploadException;
-import com.cgi.federalholidayapi.exception.HolidayNotFoundException;
+import com.cgi.federalholidayapi.exception.*;
 import com.cgi.federalholidayapi.repository.HolidayRepository;
 import java.nio.charset.StandardCharsets;
 
@@ -144,8 +144,8 @@ public class HolidayServiceImplTest {
     void shouldUploadHolidaysSuccessfully() throws Exception {
         String csvContent = """
                 country,name,date
-                USA,Independence Day,04-07-2026
-                CANADA,Canada Day,01-07-2026
+                USA,Independence Day,2026-07-04
+                CANADA,Canada Day,2026-07-01
                 """;
         MockMultipartFile file  = new MockMultipartFile("file","holidays.csv","text/csv",csvContent.getBytes(StandardCharsets.UTF_8) );
         when(holidayRepository.saveAll(anyList())).thenReturn(List.of());
@@ -160,6 +160,13 @@ public class HolidayServiceImplTest {
         assertThrows(FileUploadException.class,
                 () -> holidayService.uploadHolidays(file)
         );
+    }
+    
+    @Test
+    void shouldNotAddDuplicateHoliday() {
+        HolidayRequest request = new HolidayRequest(Country.USA,"Independence Day",LocalDate.of(2026,7,4));
+        when(holidayRepository.existsByCountryAndNameAndDate(Country.USA,"Independence Day",LocalDate.of(2026,7,4))).thenReturn(true);
+        assertThrows(DuplicateHolidayException.class,() -> holidayService.addHoliday(request));
     }
 
 }

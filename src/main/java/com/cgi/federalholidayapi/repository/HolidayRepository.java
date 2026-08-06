@@ -8,6 +8,7 @@ import com.cgi.federalholidayapi.entity.Holiday;
 import com.cgi.federalholidayapi.enums.Country;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import java.time.LocalDate;
 
 import java.util.List;
 
@@ -19,4 +20,6 @@ import java.util.List;
 public interface HolidayRepository extends JpaRepository<Holiday, Long> {
 
     List<Holiday> findByCountry(Country country);
+    
+    boolean existsByCountryAndNameAndDate(Country country, String name, LocalDate date);
 }

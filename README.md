@@ -2,19 +2,25 @@
 
 ## Overview
 
-Federal Holiday API is a RESTful Spring Boot application that allows users to manage federal holidays for different countries.
+Federal Holiday API is a RESTful Spring Boot application that provides APIs to manage federal holidays for different countries.
 
 The application supports:
-1).Adding federal holidays
-2).Updating existing holidays
-3).Listing all holidays
-4).Fetching holidays by country
-5).Uploading holidays through CSV file
-6)Deleting holidays
+
+1. Add federal holidays
+2. Update existing holidays
+3. List all holidays
+4. Fetch holidays by country
+5. Upload holidays through CSV file
+6. Delete holidays
 
 Currently supported countries:
+
 - USA
 - CANADA
+
+The application is designed using clean architecture principles and follows standard Spring Boot practices with controller, service, repository, DTO, and exception handling layers.
+
+---
 
 # Technology Stack
 
@@ -30,6 +36,7 @@ Currently supported countries:
 - Mockito
 - JaCoCo
 
+---
 
 # Project Structure
 
@@ -53,46 +60,62 @@ src
                 └── service
 
 
----
+# Clone Repository
+
+Clone the repository: git clone https://github.com/Dileepsrisri/federal-holiday-api.git
+
+
+Navigate to project directory: cd federal-holiday-api
+
 
 # How to Run the Application
 
 ## Prerequisites
 
-Install:
+Install the following:
 
 - Java 17
 - Maven
 
-Verify Java: java -version
-Verify Maven: mvn -version
+Verify installation:
+
+java -version
+mvn -version
+
 
 ## Build Application
 Run: mvn clean install
 
+
 ## Start Application
 Run:mvn spring-boot:run
 
-Application will start on: http://localhost:8080
+Application will start at: http://localhost:8080
 
 
 # Database Details
 
-The application uses H2 database for local development.
+The application uses **H2 in-memory database**.
 
+The assignment allows usage of an in-memory datastore. H2 was selected to simplify local execution without requiring any external database installation or Docker setup.
+
+Database details:
+==================
 Database URL: jdbc:h2:mem:holidaydb
+Username:sa
+Password:(empty)
 H2 Console: http://localhost:8080/h2-console
-JDBC URL:jdbc:h2:mem:holidaydb
-Username:SA
-Password:
+JDBC URL in H2 Console: jdbc:h2:mem:holidaydb
 
 
 # Swagger Documentation
+Swagger UI is available at:http://localhost:8080/swagger-ui/index.html
 
-Swagger UI is available at: http://localhost:8080/swagger-ui/index.html
+Swagger provides API documentation and allows testing APIs directly from the browser.
 
+---
 
-Available APIs:
+# API Endpoints
 
 | Method | Endpoint | Description |
 |---|---|---|
@@ -103,15 +126,14 @@ Available APIs:
 | DELETE | /api/holidays/{id} | Delete holiday |
 | POST | /api/holidays/upload | Upload CSV file |
 
-
 ---
 
 # API Details
 
 ## Add Holiday
-Endpoint:POST /api/holidays
+Endpoint: POST /api/holidays
 
-Sample Request:
+Request:
 
 json
 {
@@ -119,6 +141,8 @@ json
   "name": "Independence Day",
   "date": "2026-07-04"
 }
+
+Date format: yyyy-MM-dd
 
 
 ## Get All Holidays
@@ -141,8 +165,9 @@ Example: DELETE /api/holidays/1
 
 ## Upload Holidays Using CSV
 Endpoint:POST /api/holidays/upload
-Request type:multipart/form-data
+Request type: multipart/form-data
 Parameter:file
+
 CSV format:
 csv
 country,name,date
@@ -151,11 +176,11 @@ CANADA,Canada Day,2026-07-01
 
 
 # Validation Rules
-- Country is mandatory.
-- Holiday name is mandatory.
-- Holiday date is mandatory.
-- Date format should be:dd-MM-yyyy
 
+- Country is mandatory
+- Holiday name is mandatory
+- Holiday date is mandatory
+- Date format should be `yyyy-MM-dd`
 
 # Exception Handling
 
@@ -167,49 +192,55 @@ The application implements global exception handling for:
 - Invalid input data
 
 
----
+# Postman Collection
+
+A Postman collection is provided for testing all APIs.
+Location: Postman/Federal Holiday API.postman_collection.json
+Import this collection into Postman to execute API requests.
+
+
 
 # Testing
-Testing framework:
+
+Testing frameworks:
+
 - JUnit 5
 - Mockito
 - MockMvc
 
-Run tests:mvn clean test
+Run tests: mvn clean test
 
 
 # Code Coverage
 
 JaCoCo is configured for test coverage reporting.
-Generate report:mvn jacoco:report
-Coverage report location:target/site/jacoco/index.html
+Generate coverage report: mvn clean test
+Coverage report location: target/site/jacoco/index.html
 Current test coverage:91%
+
 
 # Assumptions
 
 - Supported countries are limited to USA and CANADA as mentioned in the requirement.
-- Country values are implemented using Enum so new countries can be added easily.
-- CSV upload supports the defined format only.
-- CSV date format is dd-MM-yyyy.
-- H2 database is used for local development and testing.
+- Country values are implemented using Enum, allowing easy addition of future countries.
+- CSV upload supports only the defined CSV format.
+- CSV date format is 'yyyy-MM-dd'.
+- Duplicate holidays with the same country, name and date are not allowed.
+- H2 in-memory database is used because the assignment permits an in-memory datastore.
 - Delete API was added to support complete CRUD operations.
 - File upload validates empty files and invalid data formats.
 - Swagger documentation is provided for API consumers.
 
 
----
-
 # Future Enhancements
 
 Possible improvements:
-- Replace H2 with PostgreSQL/MySQL database.
-- Add Docker support.
-- Add authentication and authorization using Spring Security.
-- Add pagination for holiday listing.
-- Add audit logging.
+- Replace H2 with PostgreSQL/MySQL database
+- Add Docker support
+- Add authentication and authorization using Spring Security
+- Add pagination for holiday listing
+- Add audit logging
 
-
----
 
 # Author
 Pasupuleti Dileep Kumar

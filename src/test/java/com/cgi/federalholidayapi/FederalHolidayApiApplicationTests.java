@@ -1,4 +1,4 @@
-package com.cgi.federal_holiday_api;
+package com.cgi.federalholidayapi;
 
 import com.cgi.federalholidayapi.FederalHolidayApiApplication;
 import org.junit.jupiter.api.Test;
